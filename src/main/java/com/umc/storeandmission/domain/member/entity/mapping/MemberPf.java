@@ -25,5 +25,5 @@ public class MemberPf extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "pf_id")
-    private PreferenceFood perferenceFood;
+    private PreferenceFood preferenceFood;
 }
