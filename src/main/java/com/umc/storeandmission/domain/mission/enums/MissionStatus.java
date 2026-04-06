@@ -1,0 +1,5 @@
+package com.umc.storeandmission.domain.mission.enums;
+
+public enum MissionStatus {
+    COMPLETE, FAILED
+}
