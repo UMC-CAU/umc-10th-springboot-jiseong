@@ -1,6 +1,7 @@
 package com.umc.storeandmission.domain.mission.entity;
 
 import com.umc.storeandmission.domain.mission.enums.StoreType;
+import com.umc.storeandmission.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -14,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Store extends Mission {
+public class Store extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "store_id")

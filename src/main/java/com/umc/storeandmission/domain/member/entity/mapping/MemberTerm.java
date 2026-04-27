@@ -4,10 +4,13 @@ import com.umc.storeandmission.domain.member.entity.Member;
 import com.umc.storeandmission.domain.member.entity.Term;
 import com.umc.storeandmission.global.entity.BaseEntity;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -26,4 +29,12 @@ public class MemberTerm extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "term_id")
     private Term term;
+
+    @NotNull
+    @Column(name = "is_agreed")
+    private Boolean isAgreed;
+
+    @Column(name = "agreed_at")
+    private LocalDateTime agreedAt;
+
 }
