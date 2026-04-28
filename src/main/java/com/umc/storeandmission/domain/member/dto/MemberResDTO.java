@@ -15,4 +15,8 @@ public class MemberResDTO {
         Long point,
         Integer numOfMissionSuccess
     ) {}
+
+    public record GetCompleteCount(
+            Integer count
+    ) {}
 }
