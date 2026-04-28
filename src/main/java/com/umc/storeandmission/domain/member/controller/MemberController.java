@@ -5,6 +5,9 @@ import com.umc.storeandmission.domain.member.service.MemberService;
 import com.umc.storeandmission.domain.mission.entity.Mission;
 import com.umc.storeandmission.domain.mission.exception.code.MissionSuccessCode;
 import com.umc.storeandmission.domain.mission.service.MissionService;
+import com.umc.storeandmission.domain.review.entity.Review;
+import com.umc.storeandmission.domain.review.exception.code.ReviewSuccessCode;
+import com.umc.storeandmission.domain.review.service.ReviewService;
 import com.umc.storeandmission.global.apiPayload.ApiResponse;
 import com.umc.storeandmission.global.apiPayload.code.BaseSuccessCode;
 import com.umc.storeandmission.global.apiPayload.code.GeneralSuccessCode;
@@ -19,6 +22,7 @@ import java.util.List;
 public class MemberController {
     private final MemberService memberService;
     private final MissionService missionService;
+    private final ReviewService reviewService;
 
     @GetMapping("/me/missions")
     public ApiResponse<List<Mission>> getMissions(
@@ -34,5 +38,13 @@ public class MemberController {
     ) {
         BaseSuccessCode code = GeneralSuccessCode.OK;
         return ApiResponse.onSuccess(code, missionService.getMyCompleteCount(/*유저 정보*/));
+    }
+
+    @GetMapping("/me/reviews")
+    public ApiResponse<List<Review>> getReviews(
+            // 헤더에서 유저 정보 가져와야 함
+    ) {
+        BaseSuccessCode code = ReviewSuccessCode.REVIEW_OK;
+        return ApiResponse.onSuccess(code, reviewService.getReviewsByUserId(/*유저 정보*/));
     }
 }
