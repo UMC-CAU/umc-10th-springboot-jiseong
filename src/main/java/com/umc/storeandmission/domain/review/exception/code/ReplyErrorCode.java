@@ -7,13 +7,13 @@ import org.springframework.http.HttpStatus;
 
 @Getter
 @RequiredArgsConstructor
-public enum ReviewErrorCode implements BaseErrorCode {
-    REVIEW_BAD_REQUEST(HttpStatus.BAD_REQUEST,
-            "REVIEW400_1",
-            "리뷰 정보가 잘못되었습니다."),
-    REVIEW_NOT_FOUND(HttpStatus.NOT_FOUND,
-            "REVIEW404_1",
-            "리뷰를 찾을 수 없습니다.")
+public enum ReplyErrorCode implements BaseErrorCode {
+    REPLY_BAD_REQUEST(HttpStatus.BAD_REQUEST,
+            "REPLY400_1",
+            "답글 정보가 잘못되었습니다."),
+    REPLY_NOT_FOUND(HttpStatus.NOT_FOUND,
+            "REPLY404_1",
+            "답글을 찾을 수 없습니다.")
     ;
 
     private final HttpStatus status;
