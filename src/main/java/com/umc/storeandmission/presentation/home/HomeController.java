@@ -21,7 +21,7 @@ public class HomeController {
 
     @GetMapping("/v1/home")
     public ApiResponse<HomeResDTO.GetHome> getHome(
-            @RequestBody HomeReqDTO.GetHome dto
+            /* 헤더로 유저 정보 받아와야 함 */
     ) {
         BaseSuccessCode code = GeneralSuccessCode.OK;
         return ApiResponse.onSuccess(code, homeService.getHome(dto));
