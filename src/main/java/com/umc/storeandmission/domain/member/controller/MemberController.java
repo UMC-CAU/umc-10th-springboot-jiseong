@@ -2,10 +2,10 @@ package com.umc.storeandmission.domain.member.controller;
 
 import com.umc.storeandmission.domain.member.dto.MemberResDTO;
 import com.umc.storeandmission.domain.member.service.MemberService;
-import com.umc.storeandmission.domain.mission.entity.Mission;
+import com.umc.storeandmission.domain.mission.dto.MissionResDTO;
 import com.umc.storeandmission.domain.mission.exception.code.MissionSuccessCode;
 import com.umc.storeandmission.domain.mission.service.MissionService;
-import com.umc.storeandmission.domain.review.entity.Review;
+import com.umc.storeandmission.domain.review.dto.ReviewResDTO;
 import com.umc.storeandmission.domain.review.exception.code.ReviewSuccessCode;
 import com.umc.storeandmission.domain.review.service.ReviewService;
 import com.umc.storeandmission.global.apiPayload.ApiResponse;
@@ -25,11 +25,11 @@ public class MemberController {
     private final ReviewService reviewService;
 
     @GetMapping("/me/missions")
-    public ApiResponse<List<Mission>> getMissions(
+    public ApiResponse<List<MissionResDTO.GetInfo>> getMissions(
             // 헤더에서 유저 정보 가져와야 함
     ) {
         BaseSuccessCode code = MissionSuccessCode.MISSION_OK;
-        return ApiResponse.onSuccess(code, missionService.getMyMissions(/*유저 정보*/));
+        return ApiResponse.onSuccess(code, missionService.getMissionsByUserId(/*유저 정보*/));
     }
 
     @GetMapping("/me/missions/complete-count")
@@ -41,7 +41,7 @@ public class MemberController {
     }
 
     @GetMapping("/me/reviews")
-    public ApiResponse<List<Review>> getReviews(
+    public ApiResponse<List<ReviewResDTO.GetMyReview>> getReviews(
             // 헤더에서 유저 정보 가져와야 함
     ) {
         BaseSuccessCode code = ReviewSuccessCode.REVIEW_OK;
