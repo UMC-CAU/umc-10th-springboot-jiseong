@@ -17,5 +17,10 @@ public class MissionResDTO {
 
     @Builder
     public record GetHome(
+        Long missionId,
+        String storeName,
+        String content,
+        Integer reward,
+        LocalDate deadline
     ) {}
 }
