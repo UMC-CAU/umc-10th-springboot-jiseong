@@ -8,6 +8,11 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface MissionRepository extends JpaRepository<Mission, Long> {
+    @Query("select count(m) from Mission m " +  // count 함수 사용할 때는 N+1 발생 X
+            "join MemberMission mbm on m = mbm.mission " +
+            "where mbm.member.memberId = :memberId " +
+            "and m.store.region.regionId = :regionId ")
+    Integer countCompletedMissions(Long memberId, Long regionId);
 
     @Query("select m from Mission m " +
             "join MemberMission mbm on m = mbm.mission " +
