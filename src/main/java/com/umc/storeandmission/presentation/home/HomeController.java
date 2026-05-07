@@ -14,12 +14,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api")
+@RequestMapping("/api/v1")
 public class HomeController {
 
     private final HomeService homeService;
 
-    @GetMapping("/v1/home")
+    @GetMapping("/home")
     public ApiResponse<HomeResDTO.GetHome> getHome(
             @RequestParam Long regionId,
             Pageable pageable
