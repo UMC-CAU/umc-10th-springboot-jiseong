@@ -1,5 +1,6 @@
 package com.umc.storeandmission.domain.mission.service;
 
+import com.umc.storeandmission.domain.member.dto.MemberResDTO;
 import com.umc.storeandmission.domain.member.exception.MemberException;
 import com.umc.storeandmission.domain.member.exception.code.MemberErrorCode;
 import com.umc.storeandmission.domain.member.repository.MemberRepository;
@@ -52,5 +53,10 @@ public class MissionService {
         ).toList();
 
         return list;
+    }
+
+    // 컴파일 하려고 임의로 만든 메소드, 나중에 제대로 구현해야 함
+    public MemberResDTO.GetCompleteCount getMyCompleteCount() {
+        return new MemberResDTO.GetCompleteCount(0);
     }
 }

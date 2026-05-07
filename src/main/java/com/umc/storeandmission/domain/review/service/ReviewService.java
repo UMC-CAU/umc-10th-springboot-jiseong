@@ -16,6 +16,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class ReviewService {
@@ -42,5 +44,10 @@ public class ReviewService {
         Long reviewId = reviewRepository.save(review).getReviewId();
 
         return new ReviewResDTO.CreateReview(reviewId);
+    }
+
+    // 컴파일 하려고 임의로 만든 메소드, 나중에 제대로 구현해야 함
+    public List<ReviewResDTO.GetMyReview> getReviewsByUserId(Long memberId) {
+        return List.of();
     }
 }

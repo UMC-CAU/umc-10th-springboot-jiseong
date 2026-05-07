@@ -48,7 +48,8 @@ public class MemberController {
     public ApiResponse<List<ReviewResDTO.GetMyReview>> getMyReviews(
             // 헤더에서 유저 정보 가져와야 함
     ) {
+        Long memberId = 1L;  // 유저 id 임의로 정함
         BaseSuccessCode code = ReviewSuccessCode.REVIEW_OK;
-        return ApiResponse.onSuccess(code, reviewService.getReviewsByUserId(/*유저 정보*/));
+        return ApiResponse.onSuccess(code, reviewService.getReviewsByUserId(memberId));
     }
 }
