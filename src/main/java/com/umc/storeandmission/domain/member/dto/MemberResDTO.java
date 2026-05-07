@@ -12,8 +12,8 @@ public class MemberResDTO {
     ) {}
 
     public record GetHome(
-        Long point,
-        Integer numOfMissionSuccess
+            Long point,
+            Long numOfMissionSuccess
     ) {}
 
     public record GetCompleteCount(
