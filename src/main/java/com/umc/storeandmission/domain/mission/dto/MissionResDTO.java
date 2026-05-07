@@ -12,7 +12,7 @@ public class MissionResDTO {
         String storeName,
         String content,
         Integer reward,
-        LocalDateTime deadline
+        LocalDate deadline
     ) {}
 
     @Builder
