@@ -26,4 +26,15 @@ public class MemberService {
 
         return new MemberResDTO.GetHome(m.getPoint(), count);
     }
+
+    public MemberResDTO.GetMyPage getMyPage(Long memberId) {
+        Member m = memberRepository.findById(memberId)
+                .orElseThrow(() -> new MemberException(MemberErrorCode.MEMBER_NOT_FOUND));
+        return MemberResDTO.GetMyPage.builder()
+                .name(m.getName())
+                .email(m.getEmail())
+                .phoneNumber(m.getPhoneNumber())
+                .point(m.getPoint())
+                .build();
+    }
 }
