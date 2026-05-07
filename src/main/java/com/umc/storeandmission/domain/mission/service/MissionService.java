@@ -23,13 +23,30 @@ public class MissionService {
     public List<MissionResDTO.GetInfo> getMissionsByUserId(Long memberId, Pageable pageable) {
         if (!memberRepository.existsById(memberId)) throw new MemberException(MemberErrorCode.MEMBER_NOT_FOUND);
 
-        Page<Mission> res = missionRepository.findMissionsByMemberId(memberId, pageable);
+        Page<Mission> res = missionRepository.findMissionsByMemberId(memberId, pageable);  // 여기 수정해야 함!!!!!
         List<MissionResDTO.GetInfo> list = res.stream().map(m ->
             MissionResDTO.GetInfo.builder()
                     .storeId(m.getStore().getStoreId())  // Batch Size 설정함
                     .storeName(m.getStore().getName())
                     .content(m.getContent())
                     .reward(m.getReward())
+                    .deadline(m.getDeadline())
+                    .build()
+        ).toList();
+
+        return list;
+    }
+
+    public List<MissionResDTO.GetHome> getHome(Long memberId, Long regionId, Pageable pageable) {
+        Page<Mission> res = missionRepository.findMissionsByMemberIdAndRegionId(
+                memberId, regionId, pageable);
+
+        List<MissionResDTO.GetHome> list = res.map(m ->
+            MissionResDTO.GetHome.builder()
+                    .missionId(m.getMissionId())
+                    .storeName(m.getStore().getName())
+                    .reward(m.getReward())
+                    .content(m.getContent())
                     .deadline(m.getDeadline())
                     .build()
         ).toList();
