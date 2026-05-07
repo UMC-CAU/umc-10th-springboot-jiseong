@@ -19,4 +19,12 @@ public class MemberResDTO {
     public record GetCompleteCount(
             Integer count
     ) {}
+
+    @Builder
+    public record GetMyPage(
+            String name,
+            String email,
+            String phoneNumber,
+            Long point
+    ) { }
 }
