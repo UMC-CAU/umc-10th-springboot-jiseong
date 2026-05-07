@@ -27,12 +27,13 @@ public class MemberController {
 
     @GetMapping("/me/missions")
     public ApiResponse<List<MissionResDTO.GetInfo>> getMyMissions(
+            @RequestParam Long regionId,
             Pageable pageable  // 페이징 객체
             /* 헤더에서 유저 정보 가져와야 함 */
     ) {
         Long memberId = 1L;  // 유저 Id 임의로 설정
         BaseSuccessCode code = MissionSuccessCode.MISSION_OK;
-        return ApiResponse.onSuccess(code, missionService.getMissionsByUserId(memberId, pageable));
+        return ApiResponse.onSuccess(code, missionService.getMissionsByUserId(memberId, regionId, pageable));
     }
 
     @GetMapping("/me/missions/complete-count")
