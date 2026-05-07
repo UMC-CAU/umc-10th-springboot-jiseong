@@ -12,6 +12,7 @@ import com.umc.storeandmission.global.apiPayload.ApiResponse;
 import com.umc.storeandmission.global.apiPayload.code.BaseSuccessCode;
 import com.umc.storeandmission.global.apiPayload.code.GeneralSuccessCode;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,11 +26,13 @@ public class MemberController {
     private final ReviewService reviewService;
 
     @GetMapping("/me/missions")
-    public ApiResponse<List<MissionResDTO.GetInfo>> getMissions(
-            // 헤더에서 유저 정보 가져와야 함
+    public ApiResponse<List<MissionResDTO.GetInfo>> getMyMissions(
+            Pageable pageable  // 페이징 객체
+            /* 헤더에서 유저 정보 가져와야 함 */
     ) {
+        Long memberId = 1L;  // 유저 Id 임의로 설정
         BaseSuccessCode code = MissionSuccessCode.MISSION_OK;
-        return ApiResponse.onSuccess(code, missionService.getMissionsByUserId(/*유저 정보*/));
+        return ApiResponse.onSuccess(code, missionService.getMissionsByUserId(memberId, pageable));
     }
 
     @GetMapping("/me/missions/complete-count")
@@ -41,7 +44,7 @@ public class MemberController {
     }
 
     @GetMapping("/me/reviews")
-    public ApiResponse<List<ReviewResDTO.GetMyReview>> getReviews(
+    public ApiResponse<List<ReviewResDTO.GetMyReview>> getMyReviews(
             // 헤더에서 유저 정보 가져와야 함
     ) {
         BaseSuccessCode code = ReviewSuccessCode.REVIEW_OK;
