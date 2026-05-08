@@ -5,7 +5,6 @@ import com.umc.storeandmission.domain.member.enums.SocialLoginType;
 import com.umc.storeandmission.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
