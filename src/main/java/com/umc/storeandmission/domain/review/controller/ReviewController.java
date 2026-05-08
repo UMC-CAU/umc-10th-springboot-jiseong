@@ -20,8 +20,10 @@ public class ReviewController {
     public ApiResponse<ReviewResDTO.CreateReview> createReview(
             @PathVariable Long storeId,
             @RequestBody ReviewReqDTO.CreateReview dto
+            /* 유저 데이터 받도록 설정 */
     ) {
+        Long memberId = 1L;  // id 임의로 지정
         BaseSuccessCode code = ReviewSuccessCode.REVIEW_CREATED;
-        return ApiResponse.onSuccess(code, reviewService.createReview(storeId, dto));
+        return ApiResponse.onSuccess(code, reviewService.createReview(memberId, storeId, dto));
     }
 }

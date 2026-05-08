@@ -2,16 +2,17 @@ package com.umc.storeandmission.domain.member.controller;
 
 import com.umc.storeandmission.domain.member.dto.MemberResDTO;
 import com.umc.storeandmission.domain.member.service.MemberService;
-import com.umc.storeandmission.domain.mission.entity.Mission;
+import com.umc.storeandmission.domain.mission.dto.MissionResDTO;
 import com.umc.storeandmission.domain.mission.exception.code.MissionSuccessCode;
 import com.umc.storeandmission.domain.mission.service.MissionService;
-import com.umc.storeandmission.domain.review.entity.Review;
+import com.umc.storeandmission.domain.review.dto.ReviewResDTO;
 import com.umc.storeandmission.domain.review.exception.code.ReviewSuccessCode;
 import com.umc.storeandmission.domain.review.service.ReviewService;
 import com.umc.storeandmission.global.apiPayload.ApiResponse;
 import com.umc.storeandmission.global.apiPayload.code.BaseSuccessCode;
 import com.umc.storeandmission.global.apiPayload.code.GeneralSuccessCode;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,11 +26,14 @@ public class MemberController {
     private final ReviewService reviewService;
 
     @GetMapping("/me/missions")
-    public ApiResponse<List<Mission>> getMissions(
-            // 헤더에서 유저 정보 가져와야 함
+    public ApiResponse<List<MissionResDTO.GetInfo>> getMyMissions(
+            @RequestParam Long regionId,
+            Pageable pageable  // 페이징 객체
+            /* 헤더에서 유저 정보 가져와야 함 */
     ) {
+        Long memberId = 1L;  // 유저 Id 임의로 설정
         BaseSuccessCode code = MissionSuccessCode.MISSION_OK;
-        return ApiResponse.onSuccess(code, missionService.getMyMissions(/*유저 정보*/));
+        return ApiResponse.onSuccess(code, missionService.getMissionsByUserId(memberId, regionId, pageable));
     }
 
     @GetMapping("/me/missions/complete-count")
@@ -41,10 +45,11 @@ public class MemberController {
     }
 
     @GetMapping("/me/reviews")
-    public ApiResponse<List<Review>> getReviews(
+    public ApiResponse<List<ReviewResDTO.GetMyReview>> getMyReviews(
             // 헤더에서 유저 정보 가져와야 함
     ) {
+        Long memberId = 1L;  // 유저 id 임의로 정함
         BaseSuccessCode code = ReviewSuccessCode.REVIEW_OK;
-        return ApiResponse.onSuccess(code, reviewService.getReviewsByUserId(/*유저 정보*/));
+        return ApiResponse.onSuccess(code, reviewService.getReviewsByUserId(memberId));
     }
 }

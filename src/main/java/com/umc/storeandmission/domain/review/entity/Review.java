@@ -29,4 +29,6 @@ public class Review extends BaseEntity {
     private Store store;
 
     private String content;
+
+    private Integer rating;
 }
