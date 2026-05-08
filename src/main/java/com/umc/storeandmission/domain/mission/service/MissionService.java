@@ -6,7 +6,10 @@ import com.umc.storeandmission.domain.member.exception.code.MemberErrorCode;
 import com.umc.storeandmission.domain.member.repository.MemberRepository;
 import com.umc.storeandmission.domain.mission.dto.MissionResDTO;
 import com.umc.storeandmission.domain.mission.entity.Mission;
+import com.umc.storeandmission.domain.mission.exception.RegionException;
+import com.umc.storeandmission.domain.mission.exception.code.RegionErrorCode;
 import com.umc.storeandmission.domain.mission.repository.MissionRepository;
+import com.umc.storeandmission.domain.mission.repository.RegionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,9 +23,11 @@ public class MissionService {
 
     private final MissionRepository missionRepository;
     private final MemberRepository memberRepository;
+    private final RegionRepository regionRepository;
 
     public List<MissionResDTO.GetInfo> getMissionsByUserId(Long memberId, Long regionId, Pageable pageable) {
         if (!memberRepository.existsById(memberId)) throw new MemberException(MemberErrorCode.MEMBER_NOT_FOUND);
+        if (!regionRepository.existsById(regionId)) throw new RegionException(RegionErrorCode.REGION_NOT_FOUND);
 
         Page<Mission> res = missionRepository.findMissionsByMemberIdAndRegionId(memberId, regionId, pageable);
         List<MissionResDTO.GetInfo> list = res.stream().map(m ->
