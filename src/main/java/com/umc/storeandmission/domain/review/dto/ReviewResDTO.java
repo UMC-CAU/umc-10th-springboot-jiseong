@@ -1,5 +1,7 @@
 package com.umc.storeandmission.domain.review.dto;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 
 import java.util.List;
@@ -21,10 +23,18 @@ public class ReviewResDTO {
 
     @Builder
     public record GetMyReviews(
+            @NotNull(message = "reviewId는 필수입니다.")
             Long reviewId,
+
+            @NotNull(message = "storeId는 필수입니다.")
             Long storeId,
+
+            @NotBlank(message = "content는 필수입니다.")
             String content,
+
+            @NotNull(message = "rating은 필수입니다.")
             Integer rating
+
             // List<String> reviewImageUrl
     ) {}
 
