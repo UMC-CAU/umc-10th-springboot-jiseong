@@ -9,6 +9,6 @@ public class HomeResDTO {
 
     public record GetHome(
             MemberResDTO.GetHome member,
-            List<MissionResDTO.GetHome> missions
+            MissionResDTO.Pagination<MissionResDTO.GetHome> missions
     ) {}
 }
