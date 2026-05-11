@@ -6,4 +6,8 @@ public class ReviewReqDTO {
             String content,
             Integer rating
     ) {}
+
+    public record GetMyReviews(
+            Long memberId
+    ) {}
 }
