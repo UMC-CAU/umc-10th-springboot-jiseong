@@ -22,11 +22,13 @@ public class HomeController {
     @GetMapping("/home")
     public ApiResponse<HomeResDTO.GetHome> getHome(
             @RequestParam Long regionId,
-            Pageable pageable
+            @RequestParam Integer page,
+            @RequestParam Integer size,
+            @RequestParam String sort
             /* 헤더로 유저 정보 받아와야 함 */
     ) {
         Long memberId = 1L;  // 유저 Id 임의로 지정
         BaseSuccessCode code = GeneralSuccessCode.OK;
-        return ApiResponse.onSuccess(code, homeService.getHome(memberId, regionId, pageable));
+        return ApiResponse.onSuccess(code, homeService.getHome(memberId, regionId, page, size, sort));
     }
 }
