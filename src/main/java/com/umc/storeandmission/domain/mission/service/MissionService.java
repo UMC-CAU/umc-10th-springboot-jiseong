@@ -55,21 +55,27 @@ public class MissionService {
         );
     }
 
-    public List<MissionResDTO.GetHome> getHome(Long memberId, Long regionId, Pageable pageable) {
+    public MissionResDTO.Pagination<MissionResDTO.GetHome> getHome(
+            Long memberId,
+            Long regionId,
+            Integer page,
+            Integer size,
+            String sort
+    ) {
+        Sort sortInfo;
+        if (sort != null) sortInfo = Sort.by(sort);
+        else sortInfo = Sort.by("missionId");
+
+        PageRequest pageRequest = PageRequest.of(page, size, sortInfo);
+
         Page<Mission> res = missionRepository.findMissionsPaged(
-                memberId, regionId, pageable);  // 여기 수정해야 함!!!!!
+                memberId, regionId, MissionStatus.IN_PROGRESS, pageRequest);
 
-        List<MissionResDTO.GetHome> list = res.map(m ->
-            MissionResDTO.GetHome.builder()
-                    .missionId(m.getMissionId())
-                    .storeName(m.getStore().getName())
-                    .reward(m.getReward())
-                    .content(m.getContent())
-                    .deadline(m.getDeadline())
-                    .build()
-        ).toList();
-
-        return list;
+        return MissionConverter.toPagination(
+                res.map(MissionConverter::toGetHome).toList(),
+                page,
+                size
+        );
     }
 
     // 컴파일 하려고 임의로 만든 메소드, 나중에 제대로 구현해야 함
