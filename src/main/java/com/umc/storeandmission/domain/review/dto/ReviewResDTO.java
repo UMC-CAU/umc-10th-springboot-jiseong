@@ -1,5 +1,7 @@
 package com.umc.storeandmission.domain.review.dto;
 
+import lombok.Builder;
+
 import java.util.List;
 
 public class ReviewResDTO {
@@ -23,5 +25,13 @@ public class ReviewResDTO {
             String content,
             Integer rating,
             List<String> reviewImageUrl
+    ) {}
+
+    @Builder
+    public record Pagination<T>(
+            List<T> data,
+            Boolean hasNext,
+            String nextCursor,
+            Integer size
     ) {}
 }
