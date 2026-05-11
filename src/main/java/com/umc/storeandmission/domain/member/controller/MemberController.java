@@ -2,6 +2,7 @@ package com.umc.storeandmission.domain.member.controller;
 
 import com.umc.storeandmission.domain.member.dto.MemberResDTO;
 import com.umc.storeandmission.domain.member.service.MemberService;
+import com.umc.storeandmission.domain.mission.dto.MissionReqDTO;
 import com.umc.storeandmission.domain.mission.dto.MissionResDTO;
 import com.umc.storeandmission.domain.mission.exception.code.MissionSuccessCode;
 import com.umc.storeandmission.domain.mission.service.MissionService;
@@ -12,7 +13,6 @@ import com.umc.storeandmission.global.apiPayload.ApiResponse;
 import com.umc.storeandmission.global.apiPayload.code.BaseSuccessCode;
 import com.umc.storeandmission.global.apiPayload.code.GeneralSuccessCode;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,14 +26,24 @@ public class MemberController {
     private final ReviewService reviewService;
 
     @GetMapping("/me/missions")
-    public ApiResponse<List<MissionResDTO.GetInfo>> getMyMissions(
+    public ApiResponse<MissionResDTO.Pagination<MissionResDTO.GetInfo>> getMyMissions(
             @RequestParam Long regionId,
-            Pageable pageable  // 페이징 객체
-            /* 헤더에서 유저 정보 가져와야 함 */
+            @RequestParam String status,
+            @RequestParam Integer page,
+            @RequestParam Integer size,
+            @RequestParam(required = false) String sort,
+            @RequestBody MissionReqDTO.GetMyMissions dto
     ) {
-        Long memberId = 1L;  // 유저 Id 임의로 설정
         BaseSuccessCode code = MissionSuccessCode.MISSION_OK;
-        return ApiResponse.onSuccess(code, missionService.getMissionsByUserId(memberId, regionId, pageable));
+        return ApiResponse.onSuccess(code,
+                missionService.getMissionsByUserId(
+                        dto.memberId(),
+                        regionId,
+                        status,
+                        page,
+                        size,
+                        sort
+                ));
     }
 
     @GetMapping("/me/missions/complete-count")
