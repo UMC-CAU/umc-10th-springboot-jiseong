@@ -61,7 +61,7 @@ public class ReviewService {
         Slice<Review> reviewList;
         String nextCursor;
 
-        if (!cursor.isEmpty()) {
+        if (!cursor.isBlank()) {
             String[] cursorSplit = cursor.split(":");
             switch (query.toLowerCase()) {
                 case "id":
