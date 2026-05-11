@@ -64,7 +64,7 @@ public class MemberController {
     ) {
         BaseSuccessCode code = ReviewSuccessCode.REVIEW_OK;
         return ApiResponse.onSuccess(code,
-                reviewService.getReviewsByUserId(
+                reviewService.getReviewsByMemberId(
                         dto.memberId(),
                         size,
                         cursor,
