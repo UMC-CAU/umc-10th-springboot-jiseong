@@ -33,12 +33,12 @@ public class MemberController {
             @RequestParam Integer page,
             @RequestParam Integer size,
             @RequestParam(required = false) String sort,
-            @RequestBody MissionReqDTO.GetMyMissions dto
+            @RequestParam Long memberId  // 나중에 수정할 예정
     ) {
         BaseSuccessCode code = MissionSuccessCode.MISSION_OK;
         return ApiResponse.onSuccess(code,
                 missionService.getMissionsByUserId(
-                        dto.memberId(),
+                        memberId,
                         regionId,
                         status,
                         page,
@@ -58,14 +58,14 @@ public class MemberController {
     @GetMapping("/me/reviews")
     public ApiResponse<ReviewResDTO.Pagination<ReviewResDTO.GetMyReviews>> getMyReviews(
             @RequestParam Integer size,
-            @RequestParam String cursor,
+            @RequestParam(defaultValue = "") String cursor,
             @RequestParam String query,
-            @RequestBody ReviewReqDTO.GetMyReviews dto
+            @RequestParam Long memberId  // 나중에 수정할 예정
     ) {
         BaseSuccessCode code = ReviewSuccessCode.REVIEW_OK;
         return ApiResponse.onSuccess(code,
                 reviewService.getReviewsByMemberId(
-                        dto.memberId(),
+                        memberId,
                         size,
                         cursor,
                         query
