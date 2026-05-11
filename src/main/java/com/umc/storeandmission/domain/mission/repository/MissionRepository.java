@@ -14,7 +14,7 @@ public interface MissionRepository extends JpaRepository<Mission, Long> {
             "join MemberMission mbm on m = mbm.mission " +
             "where mbm.member.memberId = :memberId " +
             "and m.store.region.regionId = :regionId " +
-            "and m.missionStatus = 'COMPLETE' ")
+            "and mbm.missionStatus = 'COMPLETE' ")
     Long countCompletedMissions(
             @Param("memberId") Long memberId,
             @Param("regionId") Long regionId);
