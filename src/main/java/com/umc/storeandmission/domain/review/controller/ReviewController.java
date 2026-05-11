@@ -6,6 +6,7 @@ import com.umc.storeandmission.domain.review.exception.code.ReviewSuccessCode;
 import com.umc.storeandmission.domain.review.service.ReviewService;
 import com.umc.storeandmission.global.apiPayload.ApiResponse;
 import com.umc.storeandmission.global.apiPayload.code.BaseSuccessCode;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,7 +20,7 @@ public class ReviewController {
     @PostMapping("/stores/{storeId}/reviews")
     public ApiResponse<ReviewResDTO.CreateReview> createReview(
             @PathVariable Long storeId,
-            @RequestBody ReviewReqDTO.CreateReview dto
+            @RequestBody @Valid ReviewReqDTO.CreateReview dto
             /* 유저 데이터 받도록 설정 */
     ) {
         Long memberId = 1L;  // id 임의로 지정

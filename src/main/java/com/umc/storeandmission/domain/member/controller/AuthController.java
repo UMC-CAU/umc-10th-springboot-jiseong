@@ -6,6 +6,7 @@ import com.umc.storeandmission.domain.member.exception.code.MemberSuccessCode;
 import com.umc.storeandmission.domain.member.service.AuthService;
 import com.umc.storeandmission.global.apiPayload.ApiResponse;
 import com.umc.storeandmission.global.apiPayload.code.BaseSuccessCode;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,7 +22,7 @@ public class AuthController {
 
     @PostMapping("/signup")
     public ApiResponse<AuthResDTO.Signup> signup(
-            @RequestBody AuthReqDTO.Signup dto
+            @RequestBody @Valid AuthReqDTO.Signup dto
     ) {
         BaseSuccessCode code = MemberSuccessCode.MEMBER_CREATED;
         return ApiResponse.onSuccess(code, authService.signup(dto));
