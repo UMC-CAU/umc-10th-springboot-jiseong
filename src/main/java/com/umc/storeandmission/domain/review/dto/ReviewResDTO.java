@@ -19,12 +19,13 @@ public class ReviewResDTO {
             List<String> reviewImageUrl
     ) {}
 
-    public record GetMyReview(
+    @Builder
+    public record GetMyReviews(
             Long reviewId,
-            Long StoreId,
+            Long storeId,
             String content,
-            Integer rating,
-            List<String> reviewImageUrl
+            Integer rating
+            // List<String> reviewImageUrl
     ) {}
 
     @Builder
