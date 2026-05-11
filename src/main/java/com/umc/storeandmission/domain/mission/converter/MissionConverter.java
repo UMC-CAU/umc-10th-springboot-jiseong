@@ -18,6 +18,18 @@ public class MissionConverter {
                 .build();
     }
 
+    public static MissionResDTO.GetHome toGetHome(
+            Mission mission
+    ) {
+        return MissionResDTO.GetHome.builder()
+                .missionId(mission.getMissionId())
+                .storeName(mission.getStore().getName())
+                .content(mission.getContent())
+                .reward(mission.getReward())
+                .deadline(mission.getDeadline())
+                .build();
+    }
+
     public static <T> MissionResDTO.Pagination<T> toPagination(
             List<T> data,
             Integer page,
