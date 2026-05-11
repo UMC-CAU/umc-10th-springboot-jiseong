@@ -12,11 +12,19 @@ public class MemberResDTO {
     ) {}
 
     public record GetHome(
-        Long point,
-        Integer numOfMissionSuccess
+            Long point,
+            Long numOfMissionSuccess
     ) {}
 
     public record GetCompleteCount(
             Integer count
     ) {}
+
+    @Builder
+    public record GetMyPage(
+            String name,
+            String email,
+            String phoneNumber,
+            Long point
+    ) { }
 }
