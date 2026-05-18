@@ -1,6 +1,7 @@
 package com.umc.storeandmission.domain.member.dto;
 
 import com.umc.storeandmission.domain.member.enums.Gender;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -12,6 +13,10 @@ public class AuthReqDTO {
     public record Signup(
         @NotBlank(message = "이름은 필수입니다.")
         String name,
+
+        @NotBlank
+        @Email
+        String email,
 
         Gender gender,
 
