@@ -4,6 +4,7 @@ import com.umc.storeandmission.domain.member.enums.Gender;
 import com.umc.storeandmission.domain.member.enums.SocialLoginType;
 import com.umc.storeandmission.global.entity.BaseEntity;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,6 +27,9 @@ public class Member extends BaseEntity {
     @NotBlank
     private String name;
 
+    @NotBlank
+    private String password;
+
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
@@ -37,6 +41,7 @@ public class Member extends BaseEntity {
     private Long point;
 
     @NotBlank
+    @Email
     private String email;
 
     @Column(name = "social_login_type")
