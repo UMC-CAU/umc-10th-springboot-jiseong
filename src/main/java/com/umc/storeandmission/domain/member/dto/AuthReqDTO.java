@@ -4,6 +4,7 @@ import com.umc.storeandmission.domain.member.enums.Gender;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -34,6 +35,7 @@ public class AuthReqDTO {
         List<String> preferredFoods
     ) {}
 
+    @Getter
     public static class TermAgreement {
         private Long termId;
         private Boolean isAgreed;
