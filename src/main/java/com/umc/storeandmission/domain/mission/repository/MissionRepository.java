@@ -1,6 +1,7 @@
 package com.umc.storeandmission.domain.mission.repository;
 
 import com.umc.storeandmission.domain.mission.entity.Mission;
+import com.umc.storeandmission.domain.mission.enums.MissionStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,7 +14,7 @@ public interface MissionRepository extends JpaRepository<Mission, Long> {
             "join MemberMission mbm on m = mbm.mission " +
             "where mbm.member.memberId = :memberId " +
             "and m.store.region.regionId = :regionId " +
-            "and m.missionStatus = 'COMPLETE' ")
+            "and mbm.missionStatus = 'COMPLETE' ")
     Long countCompletedMissions(
             @Param("memberId") Long memberId,
             @Param("regionId") Long regionId);
@@ -21,9 +22,11 @@ public interface MissionRepository extends JpaRepository<Mission, Long> {
     @Query("select m from Mission m " +
             "join MemberMission mbm on m = mbm.mission " +
             "where mbm.member.memberId = :memberId " +
-            "and m.store.region.regionId = :regionId ")
-    Page<Mission> findMissionsByMemberIdAndRegionId(
+            "and m.store.region.regionId = :regionId " +
+            "and mbm.missionStatus = :status ")
+    Page<Mission> findMissionsPaged(
             @Param("memberId") Long memberId,
             @Param("regionId") Long regionId,
+            @Param("status") MissionStatus status,
             Pageable pageable);
 }

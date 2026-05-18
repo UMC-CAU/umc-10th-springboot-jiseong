@@ -4,12 +4,19 @@ import com.umc.storeandmission.domain.member.dto.MemberResDTO;
 import com.umc.storeandmission.domain.member.exception.MemberException;
 import com.umc.storeandmission.domain.member.exception.code.MemberErrorCode;
 import com.umc.storeandmission.domain.member.repository.MemberRepository;
+import com.umc.storeandmission.domain.mission.converter.MissionConverter;
 import com.umc.storeandmission.domain.mission.dto.MissionResDTO;
 import com.umc.storeandmission.domain.mission.entity.Mission;
+import com.umc.storeandmission.domain.mission.enums.MissionStatus;
+import com.umc.storeandmission.domain.mission.exception.RegionException;
+import com.umc.storeandmission.domain.mission.exception.code.RegionErrorCode;
 import com.umc.storeandmission.domain.mission.repository.MissionRepository;
+import com.umc.storeandmission.domain.mission.repository.RegionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,39 +27,55 @@ public class MissionService {
 
     private final MissionRepository missionRepository;
     private final MemberRepository memberRepository;
+    private final RegionRepository regionRepository;
 
-    public List<MissionResDTO.GetInfo> getMissionsByUserId(Long memberId, Long regionId, Pageable pageable) {
+    public MissionResDTO.Pagination<MissionResDTO.GetInfo> getMissionsByUserId(
+            Long memberId,
+            Long regionId,
+            String status,
+            Integer page,
+            Integer size,
+            String sort
+    ) {
         if (!memberRepository.existsById(memberId)) throw new MemberException(MemberErrorCode.MEMBER_NOT_FOUND);
+        if (!regionRepository.existsById(regionId)) throw new RegionException(RegionErrorCode.REGION_NOT_FOUND);
+        MissionStatus missionStatus = MissionStatus.valueOf(status);
 
-        Page<Mission> res = missionRepository.findMissionsByMemberIdAndRegionId(memberId, regionId, pageable);
-        List<MissionResDTO.GetInfo> list = res.stream().map(m ->
-            MissionResDTO.GetInfo.builder()
-                    .storeId(m.getStore().getStoreId())  // Batch Size 설정함
-                    .storeName(m.getStore().getName())
-                    .content(m.getContent())
-                    .reward(m.getReward())
-                    .deadline(m.getDeadline())
-                    .build()
-        ).toList();
+        Sort sortInfo;
+        if (sort != null) sortInfo = Sort.by(sort);
+        else sortInfo = Sort.by("missionId");
+        PageRequest pageRequest = PageRequest.of(page, size, sortInfo);
 
-        return list;
+        Page<Mission> res = missionRepository.findMissionsPaged(memberId, regionId, missionStatus, pageRequest);
+
+        return MissionConverter.toPagination(
+                res.map(MissionConverter::toGetInfo).toList(),
+                res.getNumber(),
+                res.getSize()
+        );
     }
 
-    public List<MissionResDTO.GetHome> getHome(Long memberId, Long regionId, Pageable pageable) {
-        Page<Mission> res = missionRepository.findMissionsByMemberIdAndRegionId(
-                memberId, regionId, pageable);
+    public MissionResDTO.Pagination<MissionResDTO.GetHome> getHome(
+            Long memberId,
+            Long regionId,
+            Integer page,
+            Integer size,
+            String sort
+    ) {
+        Sort sortInfo;
+        if (sort != null) sortInfo = Sort.by(sort);
+        else sortInfo = Sort.by("missionId");
 
-        List<MissionResDTO.GetHome> list = res.map(m ->
-            MissionResDTO.GetHome.builder()
-                    .missionId(m.getMissionId())
-                    .storeName(m.getStore().getName())
-                    .reward(m.getReward())
-                    .content(m.getContent())
-                    .deadline(m.getDeadline())
-                    .build()
-        ).toList();
+        PageRequest pageRequest = PageRequest.of(page, size, sortInfo);
 
-        return list;
+        Page<Mission> res = missionRepository.findMissionsPaged(
+                memberId, regionId, MissionStatus.IN_PROGRESS, pageRequest);
+
+        return MissionConverter.toPagination(
+                res.map(MissionConverter::toGetHome).toList(),
+                page,
+                size
+        );
     }
 
     // 컴파일 하려고 임의로 만든 메소드, 나중에 제대로 구현해야 함
