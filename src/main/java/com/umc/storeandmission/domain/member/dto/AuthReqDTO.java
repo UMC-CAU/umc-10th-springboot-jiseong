@@ -32,7 +32,7 @@ public class AuthReqDTO {
         @NotNull(message = "약관 동의 여부는 필수입니다.")
         List<TermAgreement> terms,
 
-        List<String> preferredFoods
+        List<Long> preferredFoodIds
     ) {}
 
     @Getter
