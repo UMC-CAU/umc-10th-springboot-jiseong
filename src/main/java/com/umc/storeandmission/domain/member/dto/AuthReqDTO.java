@@ -18,6 +18,9 @@ public class AuthReqDTO {
         @Email
         String email,
 
+        @NotBlank
+        String password,
+
         Gender gender,
 
         LocalDate birthday,
