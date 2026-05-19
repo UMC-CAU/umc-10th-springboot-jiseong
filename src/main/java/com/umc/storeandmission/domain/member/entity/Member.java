@@ -51,7 +51,6 @@ public class Member extends BaseEntity {
     @Column(name = "social_login_id")
     private Long socialLoginId;
 
-    @NotBlank
     @Column(name = "phone_number")
     private String phoneNumber;
 
