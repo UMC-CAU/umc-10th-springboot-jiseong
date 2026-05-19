@@ -34,7 +34,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
 
     public AuthResDTO.Signup signup(AuthReqDTO.Signup dto) {
-        if (!memberRepository.existsByEmail(dto.email()))
+        if (memberRepository.existsByEmail(dto.email()))
             throw new MemberException(MemberErrorCode.MEMBER_ALREADY_EXISTS);
 
         String encryptedPw = passwordEncoder.encode(dto.password());
@@ -46,6 +46,7 @@ public class AuthService {
                 .gender(dto.gender())
                 .birthday(dto.birthday())
                 .email(dto.email())
+                .address(dto.address())
                 .build();
 
         Long memberId = memberRepository.save(member).getMemberId();
