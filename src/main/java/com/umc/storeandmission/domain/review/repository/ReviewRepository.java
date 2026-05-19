@@ -27,6 +27,7 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     );
 
     @Query("select r from Review r " +
+            "join fetch Store s on r.store = s " +
             "where r.member.memberId = :memberId " +
             "and (r.rating < :ratingCursor " +
             "or (r.rating = :ratingCursor and r.reviewId < :idCursor)) " +
