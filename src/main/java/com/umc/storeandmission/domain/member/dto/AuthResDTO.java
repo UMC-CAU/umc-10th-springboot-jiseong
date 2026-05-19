@@ -6,7 +6,6 @@ import jakarta.validation.constraints.NotNull;
 public class AuthResDTO {
 
     public record Signup(
-            @NotNull
             Long memberId
     ) {}
 }
