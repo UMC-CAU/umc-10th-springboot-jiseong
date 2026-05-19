@@ -63,6 +63,8 @@ public class ReviewService {
 
         if (!cursor.isBlank()) {
             String[] cursorSplit = cursor.split(":");
+            if (cursor.length() != 2) throw new ReviewException(ReviewErrorCode.REVIEW_INVALID_QUERY);
+
             switch (query.toLowerCase()) {
                 case "id":
                     idCursor = Long.parseLong(cursorSplit[1]);
