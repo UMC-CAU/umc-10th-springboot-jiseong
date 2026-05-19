@@ -79,7 +79,7 @@ public class ReviewService {
                             + ":" + reviewList.getContent().getLast().getReviewId();
                     break;
                 case "rating":
-                    Double ratingCursor = Double.parseDouble(cursorSplit[0]);
+                    Integer ratingCursor = Integer.parseInt(cursorSplit[0]);
                     idCursor = Long.parseLong(cursorSplit[1]);
 
                     reviewList = reviewRepository.getReviewsByMemberIdOrderByRatingDescSliced(

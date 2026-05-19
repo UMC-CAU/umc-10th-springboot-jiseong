@@ -33,7 +33,7 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
             "order by r.rating desc, r.reviewId desc")
     Slice<Review> getReviewsByMemberIdOrderByRatingDescSliced(
         @Param("memberId") Long memberId,
-        @Param("ratingCursor") Double ratingCursor,
+        @Param("ratingCursor") Integer ratingCursor,
         @Param("idCursor") Long idCursor,
         Pageable pageable
     );
