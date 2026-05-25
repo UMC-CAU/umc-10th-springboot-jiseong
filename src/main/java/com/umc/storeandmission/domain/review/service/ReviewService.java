@@ -63,6 +63,8 @@ public class ReviewService {
 
         if (!cursor.isBlank()) {
             String[] cursorSplit = cursor.split(":");
+            if (cursor.length() != 2) throw new ReviewException(ReviewErrorCode.REVIEW_INVALID_QUERY);
+
             switch (query.toLowerCase()) {
                 case "id":
                     idCursor = Long.parseLong(cursorSplit[1]);
@@ -73,11 +75,10 @@ public class ReviewService {
                             pageRequest
                     );
 
-                    nextCursor = reviewList.getContent().getLast().getReviewId()
-                            + ":" + reviewList.getContent().getLast().getReviewId();
+                    nextCursor = reviewList.getContent().getLast().getReviewId().toString();
                     break;
                 case "rating":
-                    Double ratingCursor = Double.parseDouble(cursorSplit[0]);
+                    Integer ratingCursor = Integer.parseInt(cursorSplit[0]);
                     idCursor = Long.parseLong(cursorSplit[1]);
 
                     reviewList = reviewRepository.getReviewsByMemberIdOrderByRatingDescSliced(
@@ -87,8 +88,7 @@ public class ReviewService {
                             pageRequest
                     );
 
-                    nextCursor = reviewList.getContent().getLast().getRating()
-                            + ":" + reviewList.getContent().getLast().getReviewId();
+                    nextCursor = reviewList.getContent().getLast().getRating().toString();
                     break;
                 default:
                     throw new ReviewException(ReviewErrorCode.REVIEW_INVALID_QUERY);
@@ -101,21 +101,22 @@ public class ReviewService {
                             memberId,
                             pageRequest
                     );
-                    nextCursor = reviewList.getContent().getLast().getReviewId()
-                            + ":" + reviewList.getContent().getLast().getReviewId();
+                    nextCursor = reviewList.getContent().getLast().getReviewId().toString();
                     break;
                 case "rating":
                     reviewList = reviewRepository.getReviewsByMember_MemberIdOrderByRatingDescReviewIdDesc(
                             memberId,
                             pageRequest
                     );
-                    nextCursor = reviewList.getContent().getLast().getRating()
-                            + ":" + reviewList.getContent().getLast().getReviewId();
+                    nextCursor = reviewList.getContent().getLast().getRating().toString();
                     break;
                 default:
                     throw new ReviewException(ReviewErrorCode.REVIEW_INVALID_QUERY);
             }
         }
+
+        if (reviewList.hasNext()) nextCursor = null;
+        else nextCursor = nextCursor + ":" + reviewList.getContent().getLast().getReviewId();
 
         return ReviewConverter.toPagination(
                 reviewList.map(ReviewConverter::toGetMyReviews).toList(),

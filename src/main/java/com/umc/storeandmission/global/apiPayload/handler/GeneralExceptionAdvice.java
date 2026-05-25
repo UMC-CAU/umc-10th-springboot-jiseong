@@ -42,6 +42,7 @@ public class GeneralExceptionAdvice {
     public ResponseEntity<ApiResponse<Void>> handleException(
             Exception ex
     ) {
+        System.out.println(ex.getMessage());
         BaseErrorCode code = GeneralErrorCode.INTERNAL_SERVER_ERROR;
         return ResponseEntity.status(code.getStatus())
                 .body(ApiResponse.onFailure(code, null));

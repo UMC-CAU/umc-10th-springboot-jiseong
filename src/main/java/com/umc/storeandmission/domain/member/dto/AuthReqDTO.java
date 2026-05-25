@@ -1,8 +1,10 @@
 package com.umc.storeandmission.domain.member.dto;
 
 import com.umc.storeandmission.domain.member.enums.Gender;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -12,6 +14,13 @@ public class AuthReqDTO {
     public record Signup(
         @NotBlank(message = "이름은 필수입니다.")
         String name,
+
+        @NotBlank
+        @Email
+        String email,
+
+        @NotBlank
+        String password,
 
         Gender gender,
 
@@ -23,9 +32,10 @@ public class AuthReqDTO {
         @NotNull(message = "약관 동의 여부는 필수입니다.")
         List<TermAgreement> terms,
 
-        List<String> preferredFoods
+        List<Long> preferredFoodIds
     ) {}
 
+    @Getter
     public static class TermAgreement {
         private Long termId;
         private Boolean isAgreed;
