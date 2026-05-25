@@ -91,7 +91,7 @@ public class AuthService {
         Member m = memberRepository.getMemberByEmail(dto.email())
                 .orElseThrow(() -> new MemberException(MemberErrorCode.MEMBER_UNAUTHORIZED));
 
-        if (!passwordEncoder.encode(dto.password()).equals(m.getPassword()))
+        if (!passwordEncoder.matches(dto.password(), m.getPassword()))
             throw new MemberException(MemberErrorCode.MEMBER_UNAUTHORIZED);
 
         String token = jwtUtil.createAccessToken(new AuthMember(m));
