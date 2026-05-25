@@ -24,8 +24,8 @@ spring:
       name: admin
       password: "1234"
 
-  jwt:
-    token:
-      secretKey: ${JWT_SECRET_KEY}
-      expiration:
-        access: 1800000
+jwt:
+  token:
+    secretKey: ${JWT_SECRET_KEY}
+    expiration:
+      access: 1800000
