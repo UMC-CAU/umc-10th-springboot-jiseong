@@ -1,11 +1,13 @@
 package com.umc.storeandmission.domain.member.service;
 
+import com.umc.storeandmission.domain.member.converter.MemberConverter;
 import com.umc.storeandmission.domain.member.dto.MemberResDTO;
 import com.umc.storeandmission.domain.member.entity.Member;
 import com.umc.storeandmission.domain.member.exception.MemberException;
 import com.umc.storeandmission.domain.member.exception.code.MemberErrorCode;
 import com.umc.storeandmission.domain.member.repository.MemberRepository;
 import com.umc.storeandmission.domain.mission.repository.MissionRepository;
+import com.umc.storeandmission.global.security.entity.AuthMember;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -30,11 +32,10 @@ public class MemberService {
     public MemberResDTO.GetMyPage getMyPage(Long memberId) {
         Member m = memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberException(MemberErrorCode.MEMBER_NOT_FOUND));
-        return MemberResDTO.GetMyPage.builder()
-                .name(m.getName())
-                .email(m.getEmail())
-                .phoneNumber(m.getPhoneNumber())
-                .point(m.getPoint())
-                .build();
+        return MemberConverter.toGetMyPage(m);
+    }
+
+    public MemberResDTO.GetMyPage getMyPage(AuthMember member) {
+        return MemberConverter.toGetMyPage(member.getMember());
     }
 }
