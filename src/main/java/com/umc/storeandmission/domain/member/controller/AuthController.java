@@ -27,4 +27,12 @@ public class AuthController {
         BaseSuccessCode code = MemberSuccessCode.MEMBER_CREATED;
         return ApiResponse.onSuccess(code, authService.signup(dto));
     }
+
+    @PostMapping("/login")
+    public ApiResponse<AuthResDTO.Login> login(
+            @RequestBody @Valid AuthReqDTO.Login dto
+    ) {
+        BaseSuccessCode code = MemberSuccessCode.MEMBER_OK;
+        return ApiResponse.onSuccess(code, authService.login(dto));
+    }
 }

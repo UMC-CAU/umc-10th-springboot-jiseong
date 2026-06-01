@@ -3,7 +3,6 @@ package com.umc.storeandmission.domain.member.service;
 import com.umc.storeandmission.domain.member.dto.AuthReqDTO;
 import com.umc.storeandmission.domain.member.dto.AuthResDTO;
 import com.umc.storeandmission.domain.member.entity.Member;
-import com.umc.storeandmission.domain.member.entity.PreferenceFood;
 import com.umc.storeandmission.domain.member.entity.Term;
 import com.umc.storeandmission.domain.member.entity.mapping.MemberPf;
 import com.umc.storeandmission.domain.member.entity.mapping.MemberTerm;
@@ -12,6 +11,8 @@ import com.umc.storeandmission.domain.member.exception.code.MemberErrorCode;
 import com.umc.storeandmission.domain.member.repository.*;
 import com.umc.storeandmission.global.apiPayload.code.GeneralErrorCode;
 import com.umc.storeandmission.global.apiPayload.exception.ProjectException;
+import com.umc.storeandmission.global.security.entity.AuthMember;
+import com.umc.storeandmission.global.security.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -32,6 +33,7 @@ public class AuthService {
     private final PreferenceFoodRepository preferenceFoodRepository;
     private final MemberPfRepository memberPfRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtUtil jwtUtil;
 
     public AuthResDTO.Signup signup(AuthReqDTO.Signup dto) {
         if (memberRepository.existsByEmail(dto.email()))
@@ -83,5 +85,17 @@ public class AuthService {
         memberPfRepository.saveAll(memberPfs);
 
         return new AuthResDTO.Signup(memberId);
+    }
+
+    public AuthResDTO.Login login(AuthReqDTO.Login dto) {
+        Member m = memberRepository.getMemberByEmail(dto.email())
+                .orElseThrow(() -> new MemberException(MemberErrorCode.MEMBER_UNAUTHORIZED));
+
+        if (!passwordEncoder.matches(dto.password(), m.getPassword()))
+            throw new MemberException(MemberErrorCode.MEMBER_UNAUTHORIZED);
+
+        String token = jwtUtil.createAccessToken(new AuthMember(m));
+
+        return new AuthResDTO.Login(token);
     }
 }
