@@ -2,9 +2,11 @@ package com.umc.storeandmission.domain.member.controller;
 
 import com.umc.storeandmission.domain.member.dto.MemberResDTO;
 import com.umc.storeandmission.domain.member.service.MemberService;
+import com.umc.storeandmission.domain.mission.dto.MissionReqDTO;
 import com.umc.storeandmission.domain.mission.dto.MissionResDTO;
 import com.umc.storeandmission.domain.mission.exception.code.MissionSuccessCode;
 import com.umc.storeandmission.domain.mission.service.MissionService;
+import com.umc.storeandmission.domain.review.dto.ReviewReqDTO;
 import com.umc.storeandmission.domain.review.dto.ReviewResDTO;
 import com.umc.storeandmission.domain.review.exception.code.ReviewSuccessCode;
 import com.umc.storeandmission.domain.review.service.ReviewService;
@@ -12,7 +14,6 @@ import com.umc.storeandmission.global.apiPayload.ApiResponse;
 import com.umc.storeandmission.global.apiPayload.code.BaseSuccessCode;
 import com.umc.storeandmission.global.apiPayload.code.GeneralSuccessCode;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,14 +27,24 @@ public class MemberController {
     private final ReviewService reviewService;
 
     @GetMapping("/me/missions")
-    public ApiResponse<List<MissionResDTO.GetInfo>> getMyMissions(
+    public ApiResponse<MissionResDTO.Pagination<MissionResDTO.GetInfo>> getMyMissions(
             @RequestParam Long regionId,
-            Pageable pageable  // 페이징 객체
-            /* 헤더에서 유저 정보 가져와야 함 */
+            @RequestParam String status,
+            @RequestParam Integer page,
+            @RequestParam Integer size,
+            @RequestParam(required = false) String sort,
+            @RequestParam Long memberId  // 나중에 수정할 예정
     ) {
-        Long memberId = 1L;  // 유저 Id 임의로 설정
         BaseSuccessCode code = MissionSuccessCode.MISSION_OK;
-        return ApiResponse.onSuccess(code, missionService.getMissionsByUserId(memberId, regionId, pageable));
+        return ApiResponse.onSuccess(code,
+                missionService.getMissionsByUserId(
+                        memberId,
+                        regionId,
+                        status,
+                        page,
+                        size,
+                        sort
+                ));
     }
 
     @GetMapping("/me/missions/complete-count")
@@ -45,11 +56,19 @@ public class MemberController {
     }
 
     @GetMapping("/me/reviews")
-    public ApiResponse<List<ReviewResDTO.GetMyReview>> getMyReviews(
-            // 헤더에서 유저 정보 가져와야 함
+    public ApiResponse<ReviewResDTO.Pagination<ReviewResDTO.GetMyReviews>> getMyReviews(
+            @RequestParam Integer size,
+            @RequestParam(defaultValue = "") String cursor,
+            @RequestParam String query,
+            @RequestParam Long memberId  // 나중에 수정할 예정
     ) {
-        Long memberId = 1L;  // 유저 id 임의로 정함
         BaseSuccessCode code = ReviewSuccessCode.REVIEW_OK;
-        return ApiResponse.onSuccess(code, reviewService.getReviewsByUserId(memberId));
+        return ApiResponse.onSuccess(code,
+                reviewService.getReviewsByMemberId(
+                        memberId,
+                        size,
+                        cursor,
+                        query
+                ));
     }
 }

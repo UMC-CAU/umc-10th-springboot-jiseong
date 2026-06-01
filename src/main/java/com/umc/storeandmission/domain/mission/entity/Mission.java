@@ -36,8 +36,4 @@ public class Mission extends BaseEntity {
     @NotNull
     private LocalDate deadline;
 
-    @NotNull
-    @Enumerated(EnumType.STRING)
-    private MissionStatus missionStatus;
-
 }

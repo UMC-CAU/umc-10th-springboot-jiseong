@@ -1,5 +1,9 @@
 package com.umc.storeandmission.domain.review.dto;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import lombok.Builder;
+
 import java.util.List;
 
 public class ReviewResDTO {
@@ -17,11 +21,21 @@ public class ReviewResDTO {
             List<String> reviewImageUrl
     ) {}
 
-    public record GetMyReview(
+    @Builder
+    public record GetMyReviews(
             Long reviewId,
-            Long StoreId,
+            Long storeId,
             String content,
-            Integer rating,
-            List<String> reviewImageUrl
+            Integer rating
+
+            // List<String> reviewImageUrl
+    ) {}
+
+    @Builder
+    public record Pagination<T>(
+            List<T> data,
+            Boolean hasNext,
+            String nextCursor,
+            Integer size
     ) {}
 }

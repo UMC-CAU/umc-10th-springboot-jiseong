@@ -1,5 +1,7 @@
 package com.umc.storeandmission.domain.member.dto;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 
 public class MemberResDTO {

@@ -22,13 +22,18 @@ public class HomeService {
     private final MemberRepository memberRepository;
     private final RegionRepository regionRepository;
 
-    public HomeResDTO.GetHome getHome(Long memberId, Long regionId, Pageable pageable) {
+    public HomeResDTO.GetHome getHome(
+            Long memberId,
+            Long regionId,
+            Integer page,
+            Integer size,
+            String sort) {
         if (!memberRepository.existsById(memberId)) throw new MemberException(MemberErrorCode.MEMBER_NOT_FOUND);
         if (!regionRepository.existsById(regionId)) throw new RegionException(RegionErrorCode.REGION_NOT_FOUND);
 
         return new HomeResDTO.GetHome(
                 memberService.getHome(memberId, regionId),
-                missionService.getHome(memberId, regionId, pageable)
+                missionService.getHome(memberId, regionId, page, size, sort)
         );
     }
 }

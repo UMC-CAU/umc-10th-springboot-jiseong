@@ -9,6 +9,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Entity
 @Getter
 @Builder
@@ -31,4 +33,7 @@ public class Review extends BaseEntity {
     private String content;
 
     private Integer rating;
+
+    @OneToMany(mappedBy = "review")
+    private List<ReviewImage> reviewImages;
 }

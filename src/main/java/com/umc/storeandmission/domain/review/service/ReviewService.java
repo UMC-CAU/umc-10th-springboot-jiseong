@@ -8,15 +8,18 @@ import com.umc.storeandmission.domain.mission.entity.Store;
 import com.umc.storeandmission.domain.mission.exception.StoreException;
 import com.umc.storeandmission.domain.mission.exception.code.StoreErrorCode;
 import com.umc.storeandmission.domain.mission.repository.StoreRepository;
+import com.umc.storeandmission.domain.review.converter.ReviewConverter;
 import com.umc.storeandmission.domain.review.dto.ReviewReqDTO;
 import com.umc.storeandmission.domain.review.dto.ReviewResDTO;
 import com.umc.storeandmission.domain.review.entity.Review;
+import com.umc.storeandmission.domain.review.exception.ReviewException;
+import com.umc.storeandmission.domain.review.exception.code.ReviewErrorCode;
 import com.umc.storeandmission.domain.review.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -46,8 +49,80 @@ public class ReviewService {
         return new ReviewResDTO.CreateReview(reviewId);
     }
 
-    // 컴파일 하려고 임의로 만든 메소드, 나중에 제대로 구현해야 함
-    public List<ReviewResDTO.GetMyReview> getReviewsByUserId(Long memberId) {
-        return List.of();
+    public ReviewResDTO.Pagination<ReviewResDTO.GetMyReviews> getReviewsByMemberId(
+            Long memberId,
+            Integer size,
+            String cursor,
+            String query
+    ) {
+        PageRequest pageRequest = PageRequest.of(0, size);
+
+        long idCursor;
+        Slice<Review> reviewList;
+        String nextCursor;
+
+        if (!cursor.isBlank()) {
+            String[] cursorSplit = cursor.split(":");
+            if (cursor.length() != 2) throw new ReviewException(ReviewErrorCode.REVIEW_INVALID_QUERY);
+
+            switch (query.toLowerCase()) {
+                case "id":
+                    idCursor = Long.parseLong(cursorSplit[1]);
+
+                    reviewList = reviewRepository.getReviewsByMember_MemberIdAndReviewIdLessThanOrderByReviewIdDesc(
+                            memberId,
+                            idCursor,
+                            pageRequest
+                    );
+
+                    nextCursor = reviewList.getContent().getLast().getReviewId().toString();
+                    break;
+                case "rating":
+                    Integer ratingCursor = Integer.parseInt(cursorSplit[0]);
+                    idCursor = Long.parseLong(cursorSplit[1]);
+
+                    reviewList = reviewRepository.getReviewsByMemberIdOrderByRatingDescSliced(
+                            memberId,
+                            ratingCursor,
+                            idCursor,
+                            pageRequest
+                    );
+
+                    nextCursor = reviewList.getContent().getLast().getRating().toString();
+                    break;
+                default:
+                    throw new ReviewException(ReviewErrorCode.REVIEW_INVALID_QUERY);
+            }
+        }
+        else {
+            switch (query.toLowerCase()) {
+                case "id":
+                    reviewList = reviewRepository.getReviewsByMember_MemberIdOrderByReviewIdDesc(
+                            memberId,
+                            pageRequest
+                    );
+                    nextCursor = reviewList.getContent().getLast().getReviewId().toString();
+                    break;
+                case "rating":
+                    reviewList = reviewRepository.getReviewsByMember_MemberIdOrderByRatingDescReviewIdDesc(
+                            memberId,
+                            pageRequest
+                    );
+                    nextCursor = reviewList.getContent().getLast().getRating().toString();
+                    break;
+                default:
+                    throw new ReviewException(ReviewErrorCode.REVIEW_INVALID_QUERY);
+            }
+        }
+
+        if (reviewList.hasNext()) nextCursor = null;
+        else nextCursor = nextCursor + ":" + reviewList.getContent().getLast().getReviewId();
+
+        return ReviewConverter.toPagination(
+                reviewList.map(ReviewConverter::toGetMyReviews).toList(),
+                reviewList.hasNext(),
+                nextCursor,
+                reviewList.getSize()
+        );
     }
 }
